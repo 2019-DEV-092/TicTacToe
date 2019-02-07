@@ -3,6 +3,7 @@ package org.tictactoe.domain
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import org.tictactoe.domain.api.CellState
 import org.tictactoe.domain.api.PLAYING
 import org.tictactoe.domain.api.PlayerX
 import org.tictactoe.domain.api.TicTacToe
@@ -37,5 +38,36 @@ class GameTests {
         // test
 
         assertFalse(sut.play(1,1))
+    }
+
+    @Test
+    fun `Players alternate placing Xs and Os on the board`() {
+        // act
+
+        sut.play(0, 0)
+        val step1 = sut.state
+        sut.play(0,1)
+        val step2 = sut.state
+        sut.play(0,2)
+        val step3 = sut.state
+
+        // test
+        if (step1 is PLAYING) {
+            assertEquals(CellState.X, step1.board[0 ,0])
+        } else {
+            fail()
+        }
+
+        if (step2 is PLAYING) {
+            assertEquals(CellState.O, step2.board[0 ,1])
+        } else {
+            fail()
+        }
+
+        if (step3 is PLAYING) {
+            assertEquals(CellState.X, step3.board[0 ,2])
+        } else {
+            fail()
+        }
     }
 }

@@ -14,7 +14,7 @@ class TicTacToeImpl : TicTacToe {
     /**
      * {@inheritDoc}
      */
-    override var state: GameState = PLAYING(currentPlayer)
+    override var state: GameState = PLAYING(currentPlayer, board.copy())
 
     /**
      * {@inheritDoc}
@@ -24,8 +24,21 @@ class TicTacToeImpl : TicTacToe {
 
         if (isMoveAllowed) {
             board[row, col] = currentPlayer.playingCell
+            updateState()
         }
 
         return isMoveAllowed
     }
+
+    private fun updateState() {
+        currentPlayer = nextPlayer()
+        state = PLAYING(currentPlayer, board.copy())
+    }
+
+    private fun nextPlayer(): Player =
+        when (currentPlayer) {
+            PlayerX -> PlayerO
+            PlayerO -> PlayerX
+        }
+
 }
