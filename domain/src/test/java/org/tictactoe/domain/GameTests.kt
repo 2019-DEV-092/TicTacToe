@@ -106,4 +106,59 @@ class GameTests {
             fail()
         }
     }
+
+    @Test
+    fun `If all nine squares are filled and neither player has three in a row, the game is a draw`() {
+        // act
+
+        assertTrue(sut.play(0,0))
+        // X__
+        // ___
+        // ___
+
+        assertTrue(sut.play(0,1))
+        // XO_
+        // ___
+        // ___
+
+        assertTrue(sut.play(0,2))
+        // XOX
+        // ___
+        // ___
+
+        assertTrue(sut.play(1,1))
+        // XOX
+        // _O_
+        // ___
+
+        assertTrue(sut.play(2,1))
+        // XOX
+        // _O_
+        // _X_
+
+        assertTrue(sut.play(1,2))
+        // XOX
+        // _OO
+        // _X_
+
+        assertTrue(sut.play(1,0))
+        // XOX
+        // XOO
+        // _X_
+
+        assertTrue(sut.play(2,0))
+        // XOX
+        // XOO
+        // OX_
+
+        assertTrue(sut.play(2,2))
+        // XOX
+        // XOO
+        // OXX
+
+        // test
+
+        val state = sut.state
+        assertTrue(state is DRAW)
+    }
 }
