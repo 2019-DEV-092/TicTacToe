@@ -3,6 +3,7 @@
 buildscript {
 
     ext.kotlin_version = '1.3.21'
+    ext.java_version = JavaVersion.VERSION_1_7
 
     repositories {
         google()
