@@ -9,6 +9,7 @@ class TicTacToeImpl : TicTacToe {
 
     private val board = Board()
 
+    // PlayerX always begin
     private var currentPlayer: Player = PlayerX
 
     /**
@@ -31,8 +32,16 @@ class TicTacToeImpl : TicTacToe {
     }
 
     private fun updateState() {
-        currentPlayer = nextPlayer()
-        state = PLAYING(currentPlayer, board.copy())
+        val winningCells = board.isGameOver()
+
+        state = when {
+            winningCells != null ->
+                GAMEOVER(if (winningCells == CellState.X) PlayerX else PlayerO, board.copy())
+            else -> {
+                currentPlayer = nextPlayer()
+                PLAYING(currentPlayer, board.copy())
+            }
+        }
     }
 
     private fun nextPlayer(): Player =
@@ -40,5 +49,4 @@ class TicTacToeImpl : TicTacToe {
             PlayerX -> PlayerO
             PlayerO -> PlayerX
         }
-
 }

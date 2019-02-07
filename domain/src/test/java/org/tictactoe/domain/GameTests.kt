@@ -3,10 +3,7 @@ package org.tictactoe.domain
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.tictactoe.domain.api.CellState
-import org.tictactoe.domain.api.PLAYING
-import org.tictactoe.domain.api.PlayerX
-import org.tictactoe.domain.api.TicTacToe
+import org.tictactoe.domain.api.*
 import org.tictactoe.domain.impl.TicTacToeImpl
 
 class GameTests {
@@ -66,6 +63,45 @@ class GameTests {
 
         if (step3 is PLAYING) {
             assertEquals(CellState.X, step3.board[0 ,2])
+        } else {
+            fail()
+        }
+    }
+
+    @Test
+    fun `If a player is able to draw three Xs or three Os in a row, that player wins`() {
+        // act
+
+        assertTrue(sut.play(0,0))
+        // X__
+        // ___
+        // ___
+
+        assertTrue(sut.play(2,2))
+        // X__
+        // ___
+        // __O
+
+        assertTrue(sut.play(0,1))
+        // XX_
+        // ___
+        // __O
+
+        assertTrue(sut.play(2,1))
+        // XX_
+        // ___
+        // _OO
+
+        assertTrue(sut.play(0,2))
+        // XXX
+        // ___
+        // _OO
+
+        // test
+
+        val state = sut.state
+        if (state is GAMEOVER) {
+            assertEquals(PlayerX, state.winner)
         } else {
             fail()
         }

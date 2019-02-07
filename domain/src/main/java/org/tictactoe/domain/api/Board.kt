@@ -13,7 +13,28 @@ class Board private constructor(
         cells[row * ROWS + col] = value
     }
 
-    fun copy(): Board = Board(cells.copyOf())
+    /**
+     * Duplicate this [Board]
+     */
+    fun copy() = Board(cells.copyOf())
+
+    /**
+     * Checks if the game is over
+     * @return the winning CellState or null if no winner
+     */
+    fun isGameOver(): CellState? {
+        WINNING_LINES.forEach { line ->
+            val (a, b, c) = line
+
+            if (cells[a] != CellState.EMPTY
+                && cells[a] == cells[b]
+                && cells[a] == cells[c]) {
+                return cells[a]
+            }
+        }
+
+        return null
+    }
 
     companion object {
         /**
@@ -24,5 +45,16 @@ class Board private constructor(
          * Numbers of columns on a [Board]
          */
         const val COLS = 3
+
+        private val WINNING_LINES = arrayOf(
+            intArrayOf(0, 1, 2),
+            intArrayOf(3, 4, 5),
+            intArrayOf(6, 7, 8),
+            intArrayOf(0, 3, 6),
+            intArrayOf(1, 4, 7),
+            intArrayOf(2, 5, 8),
+            intArrayOf(0, 4, 8),
+            intArrayOf(2, 4, 6)
+        )
     }
 }
