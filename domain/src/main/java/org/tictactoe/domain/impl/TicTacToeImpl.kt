@@ -5,9 +5,7 @@ import org.tictactoe.domain.api.*
 /**
  * Represents the Game
  */
-class TicTacToeImpl : TicTacToe {
-
-    private val board = Board()
+class TicTacToeImpl(private val board: Board) : TicTacToe {
 
     // PlayerX always begin
     private var currentPlayer: Player = PlayerX

@@ -4,6 +4,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.tictactoe.domain.api.*
+import org.tictactoe.domain.impl.BoardImpl
 import org.tictactoe.domain.impl.TicTacToeImpl
 
 class GameTests {
@@ -12,7 +13,8 @@ class GameTests {
 
     @Before
     fun before() {
-        sut = TicTacToeImpl()
+        val board = BoardImpl()
+        sut = TicTacToeImpl(board)
     }
 
     @Test
