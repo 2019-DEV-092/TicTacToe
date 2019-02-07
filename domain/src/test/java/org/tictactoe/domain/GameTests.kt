@@ -1,7 +1,6 @@
 package org.tictactoe.domain
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.fail
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.tictactoe.domain.api.PLAYING
@@ -27,5 +26,16 @@ class GameTests {
         } else {
             fail()
         }
+    }
+
+    @Test
+    fun `Players cannot play on a played position`() {
+        // act
+
+        sut.play(1,1)
+
+        // test
+
+        assertFalse(sut.play(1,1))
     }
 }

@@ -7,6 +7,8 @@ import org.tictactoe.domain.api.*
  */
 class TicTacToeImpl : TicTacToe {
 
+    private val board = Board()
+
     private var currentPlayer: Player = PlayerX
 
     /**
@@ -18,6 +20,12 @@ class TicTacToeImpl : TicTacToe {
      * {@inheritDoc}
      */
     override fun play(row: Int, col: Int): Boolean {
-        return false
+        val isMoveAllowed = board[row, col] == CellState.EMPTY
+
+        if (isMoveAllowed) {
+            board[row, col] = currentPlayer.playingCell
+        }
+
+        return isMoveAllowed
     }
 }
