@@ -36,6 +36,11 @@ class Board private constructor(
         return null
     }
 
+    /**
+     * Checks if the board is full
+     */
+    fun isDraw() = cells.none { it == CellState.EMPTY }
+
     companion object {
         /**
          * Number of rows on a [Board]
