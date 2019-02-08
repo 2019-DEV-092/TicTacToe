@@ -1,5 +1,7 @@
 package org.tictactoe.domain.api
 
+import org.tictactoe.domain.api.model.Event
+
 /**
  * Game event callback interface
  */

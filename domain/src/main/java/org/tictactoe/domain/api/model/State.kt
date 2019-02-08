@@ -1,7 +1,7 @@
-package org.tictactoe.domain.api
+package org.tictactoe.domain.api.model
 
 /**
- * Represents a [TicTacToe] state
+ * Represents a state of the game
  */
 data class State internal constructor(
     val currentPlayer: Player,

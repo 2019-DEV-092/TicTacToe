@@ -1,4 +1,4 @@
-package org.tictactoe.domain.api
+package org.tictactoe.domain.api.model
 
 /**
  * Represents a game event

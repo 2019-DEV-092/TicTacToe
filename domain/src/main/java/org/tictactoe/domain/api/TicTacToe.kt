@@ -1,5 +1,8 @@
 package org.tictactoe.domain.api
 
+import org.tictactoe.domain.api.model.Move
+import org.tictactoe.domain.api.model.State
+
 /**
  * TicTacTop interface
  */
