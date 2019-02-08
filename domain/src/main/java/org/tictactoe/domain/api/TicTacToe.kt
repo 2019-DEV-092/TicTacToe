@@ -1,5 +1,6 @@
 package org.tictactoe.domain.api
 
+import org.tictactoe.domain.api.model.Event
 import org.tictactoe.domain.api.model.Move
 import org.tictactoe.domain.api.model.State
 
@@ -22,8 +23,8 @@ interface TicTacToe {
     fun play(move: Move): State
 
     /**
-     * Sets or clear the [EventCallback]
+     * Called when a game [Event] happened
      */
-    fun setEventCallback(callback: EventCallback?)
+    var onEvent: ((Event) -> Unit)?
 
 }
