@@ -4,17 +4,21 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.tictactoe.domain.api.*
-import org.tictactoe.domain.impl.BoardImpl
-import org.tictactoe.domain.impl.TicTacToeImpl
+import org.tictactoe.domain.common.Factory
+import org.tictactoe.domain.impl.BoardFactory
+import org.tictactoe.domain.impl.TicTacToeFactory
 
 class GameTests {
 
     lateinit var sut: TicTacToe
 
+    // should be injected
+    private val ticTacToeFactory : Factory<TicTacToe> =
+        TicTacToeFactory(BoardFactory())
+
     @Before
     fun before() {
-        val board = BoardImpl()
-        sut = TicTacToeImpl(board)
+        sut = ticTacToeFactory.create()
     }
 
     @Test
