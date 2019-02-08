@@ -26,7 +26,7 @@ class GameTests {
         val state = sut.state
 
         if (state is PLAYING) {
-            assertEquals(PlayerX, state.player)
+            assertEquals(PlayerX, state.currentPlayer)
         } else {
             fail()
         }
