@@ -20,5 +20,5 @@ interface Board{
     /**
      * Checks if the board is full
      */
-    fun isDraw(): Boolean
+    fun isFull(): Boolean
 }

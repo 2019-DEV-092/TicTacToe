@@ -41,7 +41,7 @@ class BoardImpl private constructor(
     /**
      * {@inheritDoc}
      */
-    override fun isDraw() = cells.none { it == CellState.EMPTY }
+    override fun isFull() = cells.none { it == CellState.EMPTY }
 
     companion object {
         /**

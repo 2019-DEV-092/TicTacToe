@@ -35,7 +35,7 @@ class TicTacToeImpl(private val board: Board) : TicTacToe {
         state = when {
             winningCells != null ->
                 GAMEOVER(if (winningCells == CellState.X) PlayerX else PlayerO, board.copy())
-            board.isDraw() -> DRAW(board.copy())
+            board.isFull() -> DRAW(board.copy())
             else -> {
                 currentPlayer = nextPlayer()
                 PLAYING(currentPlayer, board.copy())
