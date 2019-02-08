@@ -40,4 +40,20 @@ class TicTacToeTest {
         // test
         assertEquals(state1, state2)
     }
+
+    @Test
+    fun `Players alternate placing Xs and Os on the board`() {
+        // arrange
+        var state = sut.reset()
+
+        // arrange
+        // PlayerX plays a random move
+        val moveX = state.availableMoves.random()
+        assertEquals(PlayerX, moveX.player)
+
+        state = sut.play(moveX)
+        // PlayerO plays a random move
+        val moveO = state.availableMoves.random()
+        assertEquals(PlayerO, moveO.player)
+    }
 }
