@@ -1,6 +1,6 @@
 package org.tictactoe.domain.impl
 
-import org.tictactoe.domain.api.*
+import org.tictactoe.domain.api.TicTacToe
 import org.tictactoe.domain.api.model.*
 
 /**
@@ -33,7 +33,7 @@ class TicTacToeImpl : TicTacToe {
                     onEvent?.invoke(DRAW)
                 }
 
-                State(nextPlayer(), availableMoves, previousMoves)
+                State(nextPlayer, availableMoves, previousMoves)
             }
         }
 
