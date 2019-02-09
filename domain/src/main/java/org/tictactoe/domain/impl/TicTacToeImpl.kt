@@ -28,6 +28,11 @@ class TicTacToeImpl : TicTacToe {
                 val availableMoves = currentState.availableMoves
                     .filter { it != move }
                     .map { Move(nextPlayer, it.row, it.col) }
+
+                if (availableMoves.isEmpty()) {
+                    onEvent?.invoke(DRAW)
+                }
+
                 State(nextPlayer(), availableMoves, previousMoves)
             }
         }
