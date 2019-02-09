@@ -5,5 +5,5 @@ package org.tictactoe.domain.api.model
  */
 data class Move internal constructor(
     val player: Player,
-    val col: Int, val row: Int
+    val row: Int, val col: Int
 )

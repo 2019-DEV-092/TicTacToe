@@ -1,11 +1,12 @@
 package org.tictactoe.domain
 
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.tictactoe.domain.api.model.PlayerX
 import org.tictactoe.domain.api.TicTacToe
-import org.tictactoe.domain.api.model.PlayerO
+import org.tictactoe.domain.api.model.*
 
 class TicTacToeTest {
 
@@ -56,4 +57,45 @@ class TicTacToeTest {
         val moveO = state.availableMoves.random()
         assertEquals(PlayerO, moveO.player)
     }
+
+    @Test
+    fun `If a player is able to draw three Xs or three Os in a row, that player wins`() {
+        // arrange
+        var state = sut.reset()
+        val callback = mock<(Event) -> Unit>()
+        sut.onEvent = callback
+
+        // act
+        state = sut.play(state.availableMoves.find(0,0))
+        // X__
+        // ___
+        // ___
+
+        state = sut.play(state.availableMoves.find(2,2))
+        // X__
+        // ___
+        // __O
+
+        state = sut.play(state.availableMoves.find(0,1))
+        // XX_
+        // ___
+        // __O
+
+        state = sut.play(state.availableMoves.find(2,1))
+        // XX_
+        // ___
+        // _OO
+
+        state = sut.play(state.availableMoves.find(0,2))
+        // XXX
+        // ___
+        // _OO
+
+        // test
+        assertEquals(0, state.availableMoves.size)
+        verify(callback).invoke(GAMEOVER(PlayerX))
+    }
+
+    private fun List<Move>.find(row: Int, col: Int): Move =
+        first { it.col == col && it.row == row }
 }
