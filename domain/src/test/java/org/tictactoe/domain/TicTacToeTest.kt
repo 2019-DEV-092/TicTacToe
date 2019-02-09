@@ -2,7 +2,8 @@ package org.tictactoe.domain
 
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.tictactoe.domain.api.TicTacToe
@@ -49,13 +50,11 @@ class TicTacToeTest {
 
         // arrange
         // PlayerX plays a random move
-        val moveX = state.availableMoves.random()
-        assertEquals(PlayerX, moveX.player)
+        assertTrue(state.availableMoves.all { it.player == PlayerX })
+        state = sut.play(state.availableMoves.random())
 
-        state = sut.play(moveX)
-        // PlayerO plays a random move
-        val moveO = state.availableMoves.random()
-        assertEquals(PlayerO, moveO.player)
+        // test
+        assertTrue(state.availableMoves.all { it.player == PlayerO })
     }
 
     @Test
