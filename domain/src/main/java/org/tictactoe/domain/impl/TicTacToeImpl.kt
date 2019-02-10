@@ -4,7 +4,7 @@ import org.tictactoe.domain.api.TicTacToe
 import org.tictactoe.domain.api.model.*
 
 /**
- * Represents the Game
+ * TicTacToe implementation
  */
 class TicTacToeImpl : TicTacToe {
 
