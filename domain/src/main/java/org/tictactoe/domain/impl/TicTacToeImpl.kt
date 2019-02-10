@@ -15,25 +15,29 @@ class TicTacToeImpl : TicTacToe {
     override fun reset() = NEW_STATE.also { currentState = it }
 
     override fun play(move: Move): State {
-        if (currentState.availableMoves.contains(move)) {
-            val previousMoves = listOf(*currentState.previousMoves.toTypedArray(), move)
+        val moves = mutableListOf(*currentState.availableMoves.toTypedArray())
 
+        if (moves.remove(move)) {
+            val previousMoves = listOf(*currentState.previousMoves.toTypedArray(), move)
             val winner = winner(previousMoves)
 
-            currentState = if (winner != null) {
-                onEvent?.invoke(GAMEOVER(winner))
-                State(currentState.currentPlayer, emptyList(), previousMoves)
-            } else {
-                val nextPlayer = nextPlayer()
-                val availableMoves = currentState.availableMoves
-                    .filter { it != move }
-                    .map { Move(nextPlayer, it.row, it.col) }
+            currentState = when {
 
-                if (availableMoves.isEmpty()) {
-                    onEvent?.invoke(DRAW)
+                winner != null -> {
+                    onEvent?.invoke(GAMEOVER(winner))
+                    State(currentState.currentPlayer, emptyList(), previousMoves)
                 }
 
-                State(nextPlayer, availableMoves, previousMoves)
+                else -> {
+                    val nextPlayer = nextPlayer()
+                    val availableMoves = moves.map { Move(nextPlayer, it.row, it.col) }
+
+                    if (moves.isEmpty()) {
+                        onEvent?.invoke(DRAW)
+                    }
+
+                    State(nextPlayer, availableMoves, previousMoves)
+                }
             }
         }
 
