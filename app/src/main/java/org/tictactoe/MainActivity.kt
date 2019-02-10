@@ -1,6 +1,8 @@
 package org.tictactoe
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -61,7 +63,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        reset.setOnClickListener { viewModel.reset() }
         cell_0_0.setOnClickListener { cellClickListener(it) }
         cell_0_1.setOnClickListener { cellClickListener(it) }
         cell_0_2.setOnClickListener { cellClickListener(it) }
@@ -71,6 +72,21 @@ class MainActivity : AppCompatActivity() {
         cell_2_0.setOnClickListener { cellClickListener(it) }
         cell_2_1.setOnClickListener { cellClickListener(it) }
         cell_2_2.setOnClickListener { cellClickListener(it) }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            R.id.reset -> {
+                viewModel.reset()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }
 
