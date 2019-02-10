@@ -74,6 +74,9 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+private fun List<PreviousMove>.find(row: Int, col: Int): PreviousMove? =
+    firstOrNull { it.move.col == col && it.move.row == row }
+
 private fun List<Move>.find(row: Int, col: Int): Move? =
     firstOrNull { it.col == col && it.row == row }
 

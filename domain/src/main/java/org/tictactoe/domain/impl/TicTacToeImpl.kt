@@ -15,10 +15,13 @@ class TicTacToeImpl : TicTacToe {
     override fun reset() = NEW_STATE.also { currentState = it }
 
     override fun play(move: Move): State {
-        val moves = mutableListOf(*currentState.availableMoves.toTypedArray())
 
-        if (moves.remove(move)) {
-            val previousMoves = listOf(*currentState.previousMoves.toTypedArray(), move)
+        val availableMoves = mutableListOf(*currentState.availableMoves.toTypedArray())
+
+        if (availableMoves.remove(move)) {
+
+            val previousMoves = listOf(*currentState.previousMoves.toTypedArray(),
+                PreviousMove(currentState.currentPlayer, move))
             val winner = winner(previousMoves)
 
             currentState = when {
@@ -30,9 +33,8 @@ class TicTacToeImpl : TicTacToe {
 
                 else -> {
                     val nextPlayer = nextPlayer()
-                    val availableMoves = moves.map { Move(nextPlayer, it.row, it.col) }
 
-                    if (moves.isEmpty()) {
+                    if (availableMoves.isEmpty()) {
                         onEvent?.invoke(DRAW)
                     }
 
@@ -50,10 +52,10 @@ class TicTacToeImpl : TicTacToe {
             PlayerO -> PlayerX
         }
 
-    private fun winner(moves :List<Move>): Player? {
+    private fun winner(moves :List<PreviousMove>): Player? {
         val movesX = moves
             .filter { it.player == PlayerX }
-            .map { it.row * ROWS + it.col }
+            .map { it.move.row * ROWS + it.move.col }
 
         for (line in WINNING_LINES) {
             if (movesX.containsAll(line))
@@ -62,7 +64,7 @@ class TicTacToeImpl : TicTacToe {
 
         val movesO = moves
             .filter { it.player == PlayerO }
-            .map { it.row * ROWS + it.col }
+            .map { it.move.row * ROWS + it.move.col }
 
         for (line in WINNING_LINES) {
             if (movesO.containsAll(line))
@@ -75,7 +77,7 @@ class TicTacToeImpl : TicTacToe {
     companion object {
         private val NEW_STATE: State = State(
             PlayerX,
-            (0..2).map { col -> (0..2).map { row -> Move(PlayerX, row, col) } }.flatten(),
+            (0..2).map { col -> (0..2).map { row -> Move(row, col) } }.flatten(),
             emptyList()
         )
 
