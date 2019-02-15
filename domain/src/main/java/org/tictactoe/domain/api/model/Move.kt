@@ -1,8 +1,9 @@
 package org.tictactoe.domain.api.model
 
 /**
- * Represents a move a player can do
+ * Represents a [Player] move
  */
-data class Move internal constructor(
-    val row: Int, val col: Int
+open class Move (
+    open val player: Player,
+    open val position: Position
 )

@@ -1,20 +1,19 @@
 package org.tictactoe.domain
 
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import org.junit.Assert.assertEquals
+import com.nhaarman.mockitokotlin2.*
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.tictactoe.domain.api.TicTacToe
 import org.tictactoe.domain.api.model.*
+import org.tictactoe.domain.impl.TicTacToeImpl
 
 class TicTacToeTest {
 
-    lateinit var sut: TicTacToe
+    private lateinit var sut: TicTacToeImpl
 
     @Before
     fun before() {
-        sut = ticTacToeFactory.create()
+        sut = TicTacToeImpl()
     }
 
     @Test
@@ -23,7 +22,7 @@ class TicTacToeTest {
         val state = sut.reset()
 
         // test
-        assertEquals(PlayerX, state.currentPlayer)
+        assertTrue(state.availableMoves.all { it.player.symbol == "X" })
     }
 
     @Test
@@ -32,10 +31,10 @@ class TicTacToeTest {
         val newState = sut.reset()
 
         // act
-        // PlayerX plays a random move
+        // PlayerX plays a random position
         val firstMove = newState.availableMoves.random()
         val state1 = sut.play(firstMove)
-        // PlayerO try to replay PlayerX move
+        // PlayerO try to replay PlayerX position
         val state2 = sut.play(firstMove)
 
         // test
@@ -48,12 +47,12 @@ class TicTacToeTest {
         var state = sut.reset()
 
         // arrange
-        // PlayerX plays a random move
-        assertEquals(PlayerX, state.currentPlayer)
+        // PlayerX plays a random position
+        assertTrue(state.availableMoves.all { it.player.symbol == "X" })
         state = sut.play(state.availableMoves.random())
 
         // test
-        assertEquals(PlayerO, state.currentPlayer)
+        assertTrue(state.availableMoves.all { it.player.symbol == "O" })
     }
 
     @Test
@@ -91,7 +90,13 @@ class TicTacToeTest {
 
         // test
         assertEquals(0, state.availableMoves.size)
-        verify(callback).invoke(GAMEOVER(PlayerX))
+        verify(callback).invoke(check {
+            if (it is GAMEOVER) {
+                assertEquals("X", it.winner?.symbol)
+            } else {
+                fail()
+            }
+        })
     }
 
     @Test
@@ -150,10 +155,16 @@ class TicTacToeTest {
 
         // test
         assertEquals(0, state.availableMoves.size)
-        verify(callback).invoke(DRAW)
+        verify(callback).invoke(check {
+            if (it is GAMEOVER) {
+                assertEquals(null, it.winner)
+            } else {
+                fail()
+            }
+        })
     }
 
 
     private fun List<Move>.find(row: Int, col: Int): Move =
-        first { it.col == col && it.row == row }
+        first { it.position.col == col && it.position.row == row }
 }

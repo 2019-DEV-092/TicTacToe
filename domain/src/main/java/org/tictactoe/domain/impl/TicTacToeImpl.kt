@@ -6,7 +6,7 @@ import org.tictactoe.domain.api.model.*
 /**
  * TicTacToe implementation
  */
-class TicTacToeImpl : TicTacToe {
+open class TicTacToeImpl : TicTacToe {
 
     private lateinit var currentState: State
 
@@ -20,25 +20,23 @@ class TicTacToeImpl : TicTacToe {
 
         if (availableMoves.remove(move)) {
 
-            val previousMoves = listOf(*currentState.previousMoves.toTypedArray(),
-                PreviousMove(currentState.currentPlayer, move))
+            val previousMoves = listOf(*currentState.previousMoves.toTypedArray(), move)
             val winner = winner(previousMoves)
 
             currentState = when {
 
                 winner != null -> {
                     onEvent?.invoke(GAMEOVER(winner))
-                    State(currentState.currentPlayer, emptyList(), previousMoves)
+                    State(emptyList(), previousMoves)
                 }
 
                 else -> {
-                    val nextPlayer = nextPlayer()
-
                     if (availableMoves.isEmpty()) {
-                        onEvent?.invoke(DRAW)
+                        onEvent?.invoke(GAMEOVER(null))
                     }
 
-                    State(nextPlayer, availableMoves, previousMoves)
+                    val nextPlayer = nextPlayer(move.player)
+                    State(availableMoves.map { Move(nextPlayer, it.position) }, previousMoves)
                 }
             }
         }
@@ -46,16 +44,13 @@ class TicTacToeImpl : TicTacToe {
         return currentState
     }
 
-    private fun nextPlayer() =
-        when (currentState.currentPlayer) {
-            PlayerX -> PlayerO
-            PlayerO -> PlayerX
-        }
+    protected open fun nextPlayer(currentPlayer: Player) =
+        if (currentPlayer == PlayerX) PlayerO else PlayerX
 
-    private fun winner(moves :List<PreviousMove>): Player? {
+    protected open fun winner(moves :List<Move>): Player? {
         val movesX = moves
             .filter { it.player == PlayerX }
-            .map { it.move.row * ROWS + it.move.col }
+            .map { it.position.row * ROWS + it.position.col }
 
         for (line in WINNING_LINES) {
             if (movesX.containsAll(line))
@@ -64,7 +59,7 @@ class TicTacToeImpl : TicTacToe {
 
         val movesO = moves
             .filter { it.player == PlayerO }
-            .map { it.move.row * ROWS + it.move.col }
+            .map { it.position.row * ROWS + it.position.col }
 
         for (line in WINNING_LINES) {
             if (movesO.containsAll(line))
@@ -74,24 +69,25 @@ class TicTacToeImpl : TicTacToe {
         return null
     }
 
-    companion object {
-        private val NEW_STATE: State = State(
-            PlayerX,
-            (0..2).map { col -> (0..2).map { row -> Move(row, col) } }.flatten(),
-            emptyList()
-        )
-
+    private companion object {
         /**
-         * Number of rows on a [BoardImpl]
+         * Number of rows
          */
         const val ROWS = 3
         /**
-         * Numbers of columns on a [BoardImpl]
+         * Numbers of columns
          */
         const val COLS = 3
 
+        val PlayerX = Player("X")
+        val PlayerO = Player("O")
 
-        private val WINNING_LINES = arrayOf(
+        val NEW_STATE: State = State(
+            (0 until COLS).map { col -> (0 until ROWS).map { row -> Move(PlayerX, Position(row, col)) } }.flatten(),
+            emptyList()
+        )
+
+        val WINNING_LINES = arrayOf(
             listOf(0, 1, 2),
             listOf(3, 4, 5),
             listOf(6, 7, 8),

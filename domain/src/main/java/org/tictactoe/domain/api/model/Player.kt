@@ -1,9 +1,8 @@
 package org.tictactoe.domain.api.model
 
 /**
- * Represents the Players
+ * Represents a Player
  */
-sealed class Player
-
-object PlayerX : Player()
-object PlayerO : Player()
+open class Player (
+    open val symbol: String
+)

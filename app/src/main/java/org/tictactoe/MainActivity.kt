@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
         viewModel.gameState.observe(this, Observer { state ->
-            status.text = "Player ${state.currentPlayer.name()} turn"
+            status.text = "Player ${state.availableMoves.firstOrNull()?.player?.name()} turn"
             cell_0_0.text = state.previousMoves.find(0, 0)?.player?.name()
             cell_0_0.tag = state.availableMoves.find(0, 0)
             cell_0_1.text = state.previousMoves.find(0, 1)?.player?.name()
@@ -50,13 +50,14 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.gameEvent.observe(this, Observer {
             it.getContentIfNotHandled()?.let { gameEvent ->
-                when (gameEvent) {
-                    is DRAW -> Toast.makeText(this,
-                        "It's a draw!",
-                        Toast.LENGTH_LONG)
-                        .show()
-                    is GAMEOVER -> Toast.makeText(this,
-                        "Player ${gameEvent.winner.name()} wins!",
+                if (gameEvent is GAMEOVER) {
+
+                    val text = gameEvent.winner?.let { player ->
+                        "Player ${player.name()} wins!"
+                    } ?: "It's a draw!"
+
+                    Toast.makeText(this,
+                        text,
                         Toast.LENGTH_LONG)
                         .show()
                 }
@@ -90,10 +91,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-private fun List<PreviousMove>.find(row: Int, col: Int): PreviousMove? =
-    firstOrNull { it.move.col == col && it.move.row == row }
-
 private fun List<Move>.find(row: Int, col: Int): Move? =
-    firstOrNull { it.col == col && it.row == row }
+    firstOrNull { it.position.col == col && it.position.row == row }
 
-private fun Player.name(): String = if (this is PlayerX) "X" else "O"
+private fun Player.name(): String = symbol
