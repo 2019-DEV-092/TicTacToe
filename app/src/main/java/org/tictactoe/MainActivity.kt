@@ -27,7 +27,9 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
         viewModel.gameState.observe(this, Observer { state ->
-            status.text = "Player ${state.availableMoves.firstOrNull()?.player?.name()} turn"
+            status.text = state.availableMoves.firstOrNull()?.let { move ->
+                "Player ${move.player.name()} turn"
+            } ?: "Game Over"
             cell_0_0.text = state.previousMoves.find(0, 0)?.player?.name()
             cell_0_0.tag = state.availableMoves.find(0, 0)
             cell_0_1.text = state.previousMoves.find(0, 1)?.player?.name()
