@@ -1,17 +1,17 @@
 package org.tictactoe.domain
 
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Assert.*
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.tictactoe.domain.api.model.*
 import org.tictactoe.domain.impl.TicTacToeImpl
 
-class TicTacToeTest {
+class TicTacToeImplTest {
 
     private lateinit var sut: TicTacToeImpl
 
-    @Before
+    @BeforeEach
     fun before() {
         sut = TicTacToeImpl()
     }
