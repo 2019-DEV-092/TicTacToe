@@ -2,19 +2,12 @@ package org.tictactoe.domain
 
 import com.nhaarman.mockitokotlin2.*
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.tictactoe.domain.api.model.*
 import org.tictactoe.domain.impl.TicTacToeImpl
 
 class TicTacToeImplTest {
-
-    private lateinit var sut: TicTacToeImpl
-
-    @BeforeEach
-    fun before() {
-        sut = TicTacToeImpl()
-    }
 
     @Test
     fun `X always goes first`() {
@@ -164,7 +157,16 @@ class TicTacToeImplTest {
         })
     }
 
-
     private fun List<Move>.find(row: Int, col: Int): Move =
         first { it.position.col == col && it.position.row == row }
+
+    companion object {
+        private lateinit var sut: TicTacToeImpl
+
+        @BeforeAll
+        @JvmStatic
+        internal fun before() {
+            sut = TicTacToeImpl()
+        }
+    }
 }
