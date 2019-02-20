@@ -49,7 +49,7 @@ class TicTacToeImplTest {
     }
 
     @Test
-    fun `If a player is able to draw three Xs or three Os in a row, that player wins`() {
+    fun `If playerX is able to draw three Xs to wins`() {
         // arrange
         var state = sut.reset()
         val callback = mock<(Event) -> Unit>()
@@ -86,6 +86,55 @@ class TicTacToeImplTest {
         verify(callback).invoke(check {
             if (it is GAMEOVER) {
                 assertEquals("X", it.winner?.symbol)
+            } else {
+                fail()
+            }
+        })
+    }
+
+    @Test
+    fun `If playerO is able to draw three Os to wins`() {
+        // arrange
+        var state = sut.reset()
+        val callback = mock<(Event) -> Unit>()
+        sut.onEvent = callback
+
+        // act
+        state = sut.play(state.availableMoves.find(0,0))
+        // X__
+        // ___
+        // ___
+
+        state = sut.play(state.availableMoves.find(2,2))
+        // X__
+        // ___
+        // __O
+
+        state = sut.play(state.availableMoves.find(0,1))
+        // XX_
+        // ___
+        // __O
+
+        state = sut.play(state.availableMoves.find(2,1))
+        // XX_
+        // ___
+        // _OO
+
+        state = sut.play(state.availableMoves.find(1,0))
+        // XX_
+        // X__
+        // _OO
+
+        state = sut.play(state.availableMoves.find(2,0))
+        // XX_
+        // X__
+        // OOO
+
+        // test
+        assertEquals(0, state.availableMoves.size)
+        verify(callback).invoke(check {
+            if (it is GAMEOVER) {
+                assertEquals("O", it.winner?.symbol)
             } else {
                 fail()
             }
